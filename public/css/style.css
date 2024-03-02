@@ -1,0 +1,15 @@
+/* public/css/style.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    background: #000; /* Optional: Sets the background color of the entire page to black */
+    overflow: hidden; /* Optional: Prevents scrollbars from appearing */
+}
+
+#phaser-game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
