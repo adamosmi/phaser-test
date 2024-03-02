@@ -37,10 +37,15 @@ function create() {
         console.log('Message from server: ', event.data);
     };
 
+    websocket.onclose = function(event) {
+        console.log('WebSocket is closed now.');
+    };
+
     websocket.onerror = function(event) {
         console.error('WebSocket error observed:', event);
     };
 }
+
 
 function update() {
     // Game update loop

@@ -3,9 +3,12 @@ import websockets
 
 
 async def handler(websocket):
-    while True:
-        message = await websocket.recv()
-        print(message)
+    try:
+        async for message in websocket:
+            print(f"Received message: {message}")
+            await websocket.send(f"Echo: {message}")
+    except websockets.exceptions.ConnectionClosed as e:
+        print(f"Connection closed: {e}")
 
 
 async def main():
