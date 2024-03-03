@@ -76,10 +76,14 @@ def calculate_ball_position():
     # determine ball direction
     # test if position is past either box on the x axis (left of paddle1's rightmost edge, right of paddle2's leftmost edge)
     if (ball_pos_x < paddle1_box["x"]["max"]) or (ball_pos_x > paddle2_box["x"]["min"]):
+        print(f"Ball box: {ball_box}")
+        print(f"Paddle1: {paddle1_box}")
+        print(f"Paddle2: {paddle2_box}")
         ball_sign_x *= -1  # switch the balls direction
 
     # test if position is past the top or bottom of the screen
     if (ball_box["y"]["min"] < 0) or (ball_box["y"]["max"] > screen_height):
+        print(f"Ball box: {ball_box}")
         ball_sign_y *= -1  # switch the balls direction
 
     # update ball position
