@@ -170,8 +170,10 @@ async def ball_handler(websocket):
 
     # update ball position
     game_state["ball"] = {
-        "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
-        "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
+        # "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
+        "x": ball_pos_x + 1,
+        # "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
+        "y": ball_pos_y + 1,
     }
     await asyncio.sleep(1 / 2)  # Update at 60Hz
 
