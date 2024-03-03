@@ -100,13 +100,25 @@ def calculate_ball_position():
         print(f"Ball box: {ball_box}")
         ball_sign_y *= -1  # switch the balls direction
 
+    # add score & reset ball
+    if ball_box["x"]["min"] < 0:
+        paddle1_score = game_state["score"][0]
+        game_state["score"][0] = paddle1_score + 1
+        return {"x": 400, "y": 300}
+
+    elif ball_box["x"]["max"] > screen_width:
+        paddle2_score = game_state["score"][1]
+        game_state["score"][1] = paddle2_score + 1
+        return {"x": 400, "y": 300}
+
     # update ball position
-    return {
-        "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
-        # "x": ball_pos_x + 1,
-        "y": ball_pos_y + ball_velocity["y"] * ball_sign_y,
-        # "y": ball_pos_y + 1,
-    }
+    else:
+        return {
+            "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
+            # "x": ball_pos_x + 1,
+            "y": ball_pos_y + ball_velocity["y"] * ball_sign_y,
+            # "y": ball_pos_y + 1,
+        }
 
 
 # define game loop
