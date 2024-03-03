@@ -73,6 +73,7 @@ async def handler(websocket):
                     player_upper_limit = 0 + paddle_length / 2
                     player_lower_limit = screen_height - paddle_length / 2
 
+                    # move player towards upper limit
                     if (player_key_direction == "up") and (
                         player_paddle_y > player_upper_limit
                     ):
@@ -80,6 +81,7 @@ async def handler(websocket):
                             player_paddle_y - paddle_velocity["y"]
                         )  # losing 10 each frame as it approaches 600 (screen bottom)
 
+                    # move player towards lower limit
                     elif (player_key_direction == "down") and (
                         player_paddle_y < player_lower_limit
                     ):
