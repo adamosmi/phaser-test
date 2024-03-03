@@ -50,12 +50,25 @@ async def handler(websocket):
                 if data["type"] == "move":
                     # Placeholder logic; you will need to check for valid movement here
                     player_paddle_y = game_state["paddles"][player_id]["y"]
-                    if (player_paddle_y >= 0 + 50 - 10) and (
-                        player_paddle_y <= 600 - 50 + 10
-                    ):
-                        if data["direction"] == "up":
+                    player_key_direction = data["direction"]
+
+                    player_upper_limit = 0 + 50
+                    player_lower_limit = 600 - 50
+
+                    # test upper limit (0 on screen)
+                    is_below_upper_limit = (
+                        (player_paddle_y - 10) >= player_upper_limit
+                    )  # losing 10 each frame as it approaches 0 (screen top)
+
+                    # test lower limit (600 on screen)
+                    is_above_lower_limit = (
+                        (player_paddle_y + 10) <= player_lower_limit
+                    )  # gaining 10 each frame as it approaches 600 (screen bottom)
+
+                    if is_below_upper_limit and is_above_lower_limit:
+                        if player_key_direction == "up":
                             game_state["paddles"][player_id]["y"] = player_paddle_y - 10
-                        elif data["direction"] == "down":
+                        elif player_key_direction == "down":
                             game_state["paddles"][player_id]["y"] = player_paddle_y + 10
 
                 # Handle player ready state
