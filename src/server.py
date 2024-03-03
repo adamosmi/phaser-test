@@ -40,6 +40,7 @@ async def handler(websocket):
             async for message in websocket:
                 # Process incoming messages, e.g., paddle movements
                 data = json.loads(message)
+                data["player_id"] = player_id
                 print(f"Received data: {data}")
 
                 # Handle different types of events
@@ -64,7 +65,7 @@ async def handler(websocket):
 
         finally:
             del players[player_id]
-            del game_state["paddles"][player_id]
+            game_state["paddles"][player_id] = {"y": 300}
 
     else:
         # add logic to handle more than 2 players
