@@ -60,11 +60,6 @@ function create() {
     // Capture keyboard input
     this.cursors = this.input.keyboard.createCursorKeys();
     
-    // // Create score text for player 1
-    // scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
-    // // Create score text for player 2, positioned on the other side of the screen
-    // scoreText2 = this.add.text(664, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
-    
     // Create score text for player 1 with larger font size and a stroke
     scoreText1 = this.add.text(10, 16, '0', { 
         fontSize: '48px', 
@@ -82,9 +77,6 @@ function create() {
         stroke: '#000',
         strokeThickness: 6
     }).setOrigin(1, 0); // right aligned
-
-
-
 
 }
 
