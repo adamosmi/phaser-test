@@ -52,6 +52,7 @@ async def handler(websocket):
                     player_paddle_y = game_state["paddles"][player_id]["y"]
                     player_key_direction = data["direction"]
 
+                    # bounds + paddle length / 2
                     player_upper_limit = 0 + 50
                     player_lower_limit = 600 - 50
 
