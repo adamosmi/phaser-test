@@ -63,7 +63,7 @@ async def handler(websocket):
                         )  # losing 10 each frame as it approaches 600 (screen bottom)
 
                     elif (player_key_direction == "down") and (
-                        player_paddle_y > player_upper_limit
+                        player_paddle_y < player_lower_limit
                     ):
                         game_state["paddles"][player_id]["y"] = (
                             player_paddle_y + 10
