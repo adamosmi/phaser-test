@@ -132,27 +132,47 @@ async def ball_handler(websocket):
     paddle2_pos_y = paddle2_pos["y"]
 
     # calculate paddle borders
-    paddle1_box = {"x": {"min": init_paddle1_pos_x + paddle_width / 2, "max": init_paddle1_pos_x + paddle_width / 2}, "y": {"min": paddle1_pos_y + paddle_length / 2, "max": paddle1_pos_y + paddle_length / 2}
-    paddle2_box = {"x": {"min": init_paddle2_pos_x + paddle_width / 2, "max": init_paddle2_pos_x + paddle_width / 2}, "y": {"min": paddle2_pos_y + paddle_length / 2, "max": paddle2_pos_y + paddle_length / 2}
+    paddle1_box = {
+        "x": {
+            "min": init_paddle1_pos_x + paddle_width / 2,
+            "max": init_paddle1_pos_x + paddle_width / 2,
+        },
+        "y": {
+            "min": paddle1_pos_y + paddle_length / 2,
+            "max": paddle1_pos_y + paddle_length / 2,
+        },
+    }
+    paddle2_box = {
+        "x": {
+            "min": init_paddle2_pos_x + paddle_width / 2,
+            "max": init_paddle2_pos_x + paddle_width / 2,
+        },
+        "y": {
+            "min": paddle2_pos_y + paddle_length / 2,
+            "max": paddle2_pos_y + paddle_length / 2,
+        },
+    }
 
     # calculate ball borders
-    ball_box = {"x": {"min": ball_pos_x - ball_radius, "max": ball_pos_x + ball_radius}, "y": {"min": ball_pos_y - ball_radius, "max" ball_pos_y + ball_radius}}
+    ball_box = {
+        "x": {"min": ball_pos_x - ball_radius, "max": ball_pos_x + ball_radius},
+        "y": {"min": ball_pos_y - ball_radius, "max": ball_pos_y + ball_radius},
+    }
 
     # determine ball direction
     # test if position is past either box on the x axis (left of paddle1's rightmost edge, right of paddle2's leftmost edge)
-    if ((ball_pos_x < paddle1_box["x"]["max"]) or (ball_pos_x > paddle2_box["x"]["min"])):
-        ball_sign_x *= -1 # switch the balls direction
+    if (ball_pos_x < paddle1_box["x"]["max"]) or (ball_pos_x > paddle2_box["x"]["min"]):
+        ball_sign_x *= -1  # switch the balls direction
 
     # test if position is past the top or bottom of the screen
-    if (ball_box["y"]["min"] < 0 or ball_box['y']['max'] > screen_height):
-        ball_sign_y *= -1 # switch the balls direction
+    if ball_box["y"]["min"] < 0 or ball_box["y"]["max"] > screen_height:
+        ball_sign_y *= -1  # switch the balls direction
 
     # update ball position
-    game_state['ball'] = {"x": ball_pos_x + ball_velocity["x"] * ball_sign, "y": ball_pos_y + ball_velocity["y"]}
-
-
-        
-
+    game_state["ball"] = {
+        "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
+        "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
+    }
 
 
 # call sub-handlers from master handler
