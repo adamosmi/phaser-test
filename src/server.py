@@ -20,7 +20,14 @@ async def game_loop():
 
 
 async def handler(websocket):
-    player_id = {v: k for k, v in players.items()}.get(websocket, 999)
+    # calc new player id
+    player_id = len(players) + 1
+
+    # store connection
+    players[player_id] = websocket
+
+    # establish initial game state
+    game_state["players"][player_id] = {"paddle": {"y": 300}}
 
     try:
         async for message in websocket:
@@ -36,9 +43,12 @@ async def handler(websocket):
                     game_state["players"][player_id]["paddle"]["y"] -= 10
                 elif data["direction"] == "down":
                     game_state["players"][player_id]["paddle"]["y"] += 10
+
             # Handle player ready state
             elif data["type"] == "ready":
-                pass
+                start_game_message = json.dumps({"type": "start"})
+                for player in players.values():
+                    await player.send(start_game_message)
 
     except websockets.exceptions.ConnectionClosed:
         print(f"Player {player_id} connection closed")
