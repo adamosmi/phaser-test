@@ -86,7 +86,7 @@ def calculate_ball_position():
     return {
         "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
         # "x": ball_pos_x + 1,
-        "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
+        "y": ball_pos_y + ball_velocity["y"] * ball_sign_y,
         # "y": ball_pos_y + 1,
     }
 
