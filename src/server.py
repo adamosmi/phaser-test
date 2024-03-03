@@ -41,7 +41,7 @@ async def game_loop():
         await asyncio.sleep(1 / 60)  # Update at 60Hz
 
 
-async def handler(websocket):
+async def paddle_handler(websocket):
     global players, game_state
     # calc new player id
     num_players = len(players)
@@ -110,13 +110,13 @@ async def handler(websocket):
         pass
 
 
-async def main():
-    async with websockets.serve(handler, "", 8765):
+async def paddle_main():
+    async with websockets.serve(paddle_handler, "", 8765):
         await asyncio.Future()  # run forever
 
 
 async def host():
-    tasks = [main(), game_loop()]
+    tasks = [paddle_main(), game_loop()]
     await asyncio.gather(*tasks)
 
 
