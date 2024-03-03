@@ -124,7 +124,7 @@ async def main():
 
 
 async def host():
-    tasks = [paddle_main(), game_loop()]
+    tasks = [main(), game_loop()]
     await asyncio.gather(*tasks)
 
 
