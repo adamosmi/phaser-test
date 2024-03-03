@@ -49,7 +49,7 @@ async def handler(websocket):
                     if data["direction"] == "up":
                         game_state["paddles"][player_id]["y"] -= 10
                     elif data["direction"] == "down":
-                        game_state["players"][player_id]["y"] += 10
+                        game_state["paddles"][player_id]["y"] += 10
 
                 # Handle player ready state
                 elif data["type"] == "ready":
@@ -64,7 +64,7 @@ async def handler(websocket):
 
         finally:
             del players[player_id]
-            del game_state["players"][player_id]
+            del game_state["paddles"][player_id]
 
     else:
         # add logic to handle more than 2 players
