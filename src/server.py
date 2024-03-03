@@ -177,7 +177,7 @@ async def ball_handler(websocket):
 
 # call sub-handlers from master handler
 async def handler(websocket):
-    tasks = [paddle_handler(websocket)]
+    tasks = [paddle_handler(websocket), ball_handler(websocket)]
     await asyncio.gather(*tasks)
 
 
