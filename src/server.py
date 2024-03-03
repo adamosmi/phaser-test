@@ -1,5 +1,6 @@
 import asyncio
 import json
+import random
 import websockets
 
 # Assuming a 2-player game, for simplicity
@@ -8,6 +9,22 @@ game_state = {
     "paddles": [{"y": 300}, {"y": 300}],
     "ball": {"x": 400, "y": 300},
 }
+
+# screen dimensions
+screen_width = 800
+screen_height = 600
+
+# object dimensions
+paddle_length = 100
+paddle_width = 10
+ball_radius = 7
+
+# paddle movement
+paddle_velocity = {"y": 10}
+
+# ball movement
+ball_initial_sign = random.choice([-1, 1])
+ball_velocity = {"x": 20, "y": 20}
 
 
 async def game_loop():
@@ -53,21 +70,21 @@ async def handler(websocket):
                     player_key_direction = data["direction"]
 
                     # bounds + paddle length / 2
-                    player_upper_limit = 0 + 50
-                    player_lower_limit = 600 - 50
+                    player_upper_limit = 0 + paddle_length / 2
+                    player_lower_limit = screen_height - paddle_length / 2
 
                     if (player_key_direction == "up") and (
                         player_paddle_y > player_upper_limit
                     ):
                         game_state["paddles"][player_id]["y"] = (
-                            player_paddle_y - 10
+                            player_paddle_y - paddle_velocity["y"]
                         )  # losing 10 each frame as it approaches 600 (screen bottom)
 
                     elif (player_key_direction == "down") and (
                         player_paddle_y < player_lower_limit
                     ):
                         game_state["paddles"][player_id]["y"] = (
-                            player_paddle_y + 10
+                            player_paddle_y + paddle_velocity["y"]
                         )  # gaining 10 each frame as it approaches 600 (screen bottom)
 
                 # Handle player ready state
