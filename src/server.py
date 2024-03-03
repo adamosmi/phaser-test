@@ -102,13 +102,13 @@ def calculate_ball_position():
 
     # add score & reset ball
     if ball_box["x"]["min"] < 0:
-        paddle1_score = game_state["score"][0]
-        game_state["score"][0] = paddle1_score + 1
+        paddle1_score = game_state["scores"][0]
+        game_state["scores"][0] = paddle1_score + 1
         return {"x": 400, "y": 300}
 
     elif ball_box["x"]["max"] > screen_width:
-        paddle2_score = game_state["score"][1]
-        game_state["score"][1] = paddle2_score + 1
+        paddle2_score = game_state["scores"][1]
+        game_state["scores"][1] = paddle2_score + 1
         return {"x": 400, "y": 300}
 
     # update ball position
