@@ -16,6 +16,8 @@ async def game_loop():
         # and check for collisions, scoring, etc.
 
         # After updating the state, broadcast it to each player
+        game_state_out = game_state.copy()
+        game_state_out["type"] = "state"
         state = json.dumps(game_state)
         print(f"Sending state: {state}")
         for player in players.values():

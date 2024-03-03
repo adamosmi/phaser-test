@@ -36,6 +36,9 @@ function create() {
         if (message.type == 'start') {
             console.log(message)
         }
+        if (message.type == 'state') {
+            gameState = message.data;
+        }
     };
 
     websocket.onclose = function(event) {
@@ -66,13 +69,13 @@ function update() {
     }
 
     // Validate and update paddle and ball positions from the game state
-    if (gameState && gameState.paddles && gameState.ball) {
-        if (gameState.paddles[0] && gameState.paddles[1]) {
-            this.paddle1.y = gameState.paddles[0].y;
-            this.paddle2.y = gameState.paddles[1].y;
-            this.ball.x = gameState.ball.x;
-            this.ball.y = gameState.ball.y;
-        }
+    if (gameState) {
+        console.log(gameState.paddles[0]);
+        console.log(gameState.paddles[1]);
+        this.paddle1.y = gameState.paddles[0].y;
+        this.paddle2.y = gameState.paddles[1].y;
+        this.ball.x = gameState.ball.x;
+        this.ball.y = gameState.ball.y;
     }
 }
 
