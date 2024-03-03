@@ -19,11 +19,16 @@ paddle_length = 100
 paddle_width = 10
 ball_radius = 7
 
+# paddle position
+init_paddle1_pos_x = 0 + 50
+init_paddle2_pos_x = screen_height - 50
+
 # paddle movement
 paddle_velocity = {"y": 10}
 
 # ball movement
-ball_initial_sign = random.choice([-1, 1])
+ball_sign_x = random.choice([-1, 1])
+ball_sign_y = random.choice([-1, 1])
 ball_velocity = {"x": 20, "y": 20}
 
 
@@ -110,6 +115,44 @@ async def paddle_handler(websocket):
     else:
         # add logic to handle more than 2 players
         pass
+
+
+# define ball logic
+async def ball_handler(websocket):
+    global game_state
+    ball_pos = game_state["ball"]
+    ball_pos_x = ball_pos["x"]
+    ball_pos_y = ball_pos["y"]
+
+    # detect collision
+    # collect paddle position
+    paddle1_pos = game_state["paddles"][0]
+    paddle2_pos = game_state["paddles"][1]
+    paddle1_pos_y = paddle1_pos["y"]
+    paddle2_pos_y = paddle2_pos["y"]
+
+    # calculate paddle borders
+    paddle1_box = {"x": {"min": init_paddle1_pos_x + paddle_width / 2, "max": init_paddle1_pos_x + paddle_width / 2}, "y": {"min": paddle1_pos_y + paddle_length / 2, "max": paddle1_pos_y + paddle_length / 2}
+    paddle2_box = {"x": {"min": init_paddle2_pos_x + paddle_width / 2, "max": init_paddle2_pos_x + paddle_width / 2}, "y": {"min": paddle2_pos_y + paddle_length / 2, "max": paddle2_pos_y + paddle_length / 2}
+
+    # calculate ball borders
+    ball_box = {"x": {"min": ball_pos_x - ball_radius, "max": ball_pos_x + ball_radius}, "y": {"min": ball_pos_y - ball_radius, "max" ball_pos_y + ball_radius}}
+
+    # determine ball direction
+    # test if position is past either box on the x axis (left of paddle1's rightmost edge, right of paddle2's leftmost edge)
+    if ((ball_pos_x < paddle1_box["x"]["max"]) or (ball_pos_x > paddle2_box["x"]["min"])):
+        ball_sign_x *= -1 # switch the balls direction
+
+    # test if position is past the top or bottom of the screen
+    if (ball_box["y"]["min"] < 0 or ball_box['y']['max'] > screen_height):
+        ball_sign_y *= -1 # switch the balls direction
+
+    # update ball position
+    game_state['ball'] = {"x": ball_pos_x + ball_velocity["x"] * ball_sign, "y": ball_pos_y + ball_velocity["y"]}
+
+
+        
+
 
 
 # call sub-handlers from master handler
