@@ -5,8 +5,8 @@ import websockets
 # Assuming a 2-player game, for simplicity
 players = {}
 game_state = {
+    "paddles": [{"y": 300}, {"y": 300}],
     "ball": {"x": 400, "y": 300},
-    "players": {0: {"paddle": {"y": 300}}, 1: {"paddle": {"y": 300}}},
 }
 
 
@@ -24,43 +24,50 @@ async def game_loop():
 
 async def handler(websocket):
     # calc new player id
-    player_id = len(players) + 1
+    num_players = len(players)
+    # normal game of 2 players
+    if num_players in [0, 1]:
+        player_id = num_players + 1
 
-    # store connection
-    players[player_id] = websocket
+        # store connection
+        players[player_id] = websocket
 
-    # establish initial game state
-    game_state["players"][player_id] = {"paddle": {"y": 300}}
+        # establish initial game state
+        game_state["players"][player_id] = {"paddle": {"y": 300}}
 
-    try:
-        async for message in websocket:
-            # Process incoming messages, e.g., paddle movements
-            data = json.loads(message)
-            print(f"Received data: {data}")
+        try:
+            async for message in websocket:
+                # Process incoming messages, e.g., paddle movements
+                data = json.loads(message)
+                print(f"Received data: {data}")
 
-            # Handle different types of events
-            # Update paddle position based on input
-            if data["type"] == "move":
-                # Placeholder logic; you will need to check for valid movement here
-                if data["direction"] == "up":
-                    game_state["players"][player_id]["paddle"]["y"] -= 10
-                elif data["direction"] == "down":
-                    game_state["players"][player_id]["paddle"]["y"] += 10
+                # Handle different types of events
+                # Update paddle position based on input
+                if data["type"] == "move":
+                    # Placeholder logic; you will need to check for valid movement here
+                    if data["direction"] == "up":
+                        game_state["paddles"][player_id]["paddle"]["y"] -= 10
+                    elif data["direction"] == "down":
+                        game_state["players"][player_id]["paddle"]["y"] += 10
 
-            # Handle player ready state
-            elif data["type"] == "ready":
-                start_game_message = json.dumps(
-                    {"type": "start", "player_id": player_id}
-                )
-                for player in players.values():
-                    await player.send(start_game_message)
+                # Handle player ready state
+                elif data["type"] == "ready":
+                    start_game_message = json.dumps(
+                        {"type": "start", "player_id": player_id}
+                    )
+                    for player in players.values():
+                        await player.send(start_game_message)
 
-    except websockets.exceptions.ConnectionClosed:
-        print(f"Player {player_id} connection closed")
+        except websockets.exceptions.ConnectionClosed:
+            print(f"Player {player_id} connection closed")
 
-    finally:
-        del players[player_id]
-        del game_state["players"][player_id]
+        finally:
+            del players[player_id]
+            del game_state["players"][player_id]
+
+    else:
+        # add logic to handle more than 2 players
+        pass
 
 
 async def main():
