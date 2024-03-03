@@ -29,7 +29,7 @@ paddle_velocity = {"y": 10}
 # ball movement
 ball_sign_x = random.choice([-1, 1])
 ball_sign_y = random.choice([-1, 1])
-ball_velocity = {"x": 1, "y": 1}
+ball_velocity = {"x": 10, "y": 10}
 
 
 def calculate_ball_position():
