@@ -58,11 +58,11 @@ def calculate_ball_position():
     }
     paddle2_box = {
         "x": {
-            "min": init_paddle2_pos_x + paddle_width / 2,
+            "min": init_paddle2_pos_x - paddle_width / 2,
             "max": init_paddle2_pos_x + paddle_width / 2,
         },
         "y": {
-            "min": paddle2_pos_y + paddle_length / 2,
+            "min": paddle2_pos_y - paddle_length / 2,
             "max": paddle2_pos_y + paddle_length / 2,
         },
     }
