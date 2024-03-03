@@ -4,7 +4,10 @@ import websockets
 
 # Assuming a 2-player game, for simplicity
 players = {}
-game_state = {"ball": {"x": 400, "y": 300}, "players": {}}
+game_state = {
+    "ball": {"x": 400, "y": 300},
+    "players": {0: {"paddle": {"y": 300}}, 1: {"paddle": {"y": 300}}},
+}
 
 
 async def game_loop():
@@ -46,7 +49,9 @@ async def handler(websocket):
 
             # Handle player ready state
             elif data["type"] == "ready":
-                start_game_message = json.dumps({"type": "start"})
+                start_game_message = json.dumps(
+                    {"type": "start", "player_id": player_id}
+                )
                 for player in players.values():
                     await player.send(start_game_message)
 
