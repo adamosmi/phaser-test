@@ -25,7 +25,7 @@ init_paddle1_pos_x = 0 + 50
 init_paddle2_pos_x = screen_width - 50
 
 # paddle movement
-VELOCITY = 10
+VELOCITY = 20
 paddle_velocity = {"y": VELOCITY}
 
 # ball movement
