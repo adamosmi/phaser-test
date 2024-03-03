@@ -33,7 +33,7 @@ async def handler(websocket):
         players[player_id] = websocket
 
         # establish initial game state
-        game_state["players"][player_id] = {"paddle": {"y": 300}}
+        game_state["paddles"][player_id] = {"y": 300}
 
         try:
             async for message in websocket:
