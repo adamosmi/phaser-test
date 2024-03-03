@@ -62,14 +62,17 @@ function update() {
         sendMessage({ type: 'move', direction: 'down' });
     }
 
-    // Update paddle and ball positions from the game state
-    if (gameState) {
-        this.paddle1.y = gameState.paddles[0].y;
-        this.paddle2.y = gameState.paddles[1].y;
-        this.ball.x = gameState.ball.x;
-        this.ball.y = gameState.ball.y;
+    // Validate and update paddle and ball positions from the game state
+    if (gameState && gameState.paddles && gameState.ball) {
+        if (gameState.paddles[0] && gameState.paddles[1]) {
+            this.paddle1.y = gameState.paddles[0].y;
+            this.paddle2.y = gameState.paddles[1].y;
+            this.ball.x = gameState.ball.x;
+            this.ball.y = gameState.ball.y;
+        }
     }
 }
+
 
 // Function to send message to server
 function sendMessage(message) {

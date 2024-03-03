@@ -23,6 +23,7 @@ async def game_loop():
 
 
 async def handler(websocket):
+    global players, game_state
     # calc new player id
     num_players = len(players)
     # normal game of 2 players
@@ -46,9 +47,9 @@ async def handler(websocket):
                 if data["type"] == "move":
                     # Placeholder logic; you will need to check for valid movement here
                     if data["direction"] == "up":
-                        game_state["paddles"][player_id]["paddle"]["y"] -= 10
+                        game_state["paddles"][player_id]["y"] -= 10
                     elif data["direction"] == "down":
-                        game_state["players"][player_id]["paddle"]["y"] += 10
+                        game_state["players"][player_id]["y"] += 10
 
                 # Handle player ready state
                 elif data["type"] == "ready":
