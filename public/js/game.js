@@ -2,13 +2,6 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false
-        }
-    },
     scene: {
         preload: preload,
         create: create,
@@ -18,9 +11,13 @@ var config = {
 
 var game = new Phaser.Game(config);
 var websocket;
+var gameState = {
+    paddles: [{ y: 300 }, { y: 300 }],
+    ball: { x: 400, y: 300 }
+};
 
 function preload() {
-    // Preload assets
+    // Preload assets, if you have any
 }
 
 function create() {
@@ -29,12 +26,13 @@ function create() {
 
     websocket.onopen = function(event) {
         console.log('Connection established');
-        // Send a test message to the server
-        sendMessage('Hello from Phaser!');
+        // Optionally, send a message to the server to indicate readiness
+        sendMessage({ type: 'ready' });
     };
 
     websocket.onmessage = function(event) {
-        console.log('Message from server: ', event.data);
+        // Parse the received message to update the game state
+        gameState = JSON.parse(event.data);
     };
 
     websocket.onclose = function(event) {
@@ -44,17 +42,39 @@ function create() {
     websocket.onerror = function(event) {
         console.error('WebSocket error observed:', event);
     };
+
+    // Add two paddles as simple sprites or graphics
+    this.paddle1 = this.add.rectangle(50, this.sys.game.config.height / 2, 10, 100, 0xffffff);
+    this.paddle2 = this.add.rectangle(this.sys.game.config.width - 50, this.sys.game.config.height / 2, 10, 100, 0xffffff);
+
+    // Add a ball as a simple sprite or graphic
+    this.ball = this.add.circle(this.sys.game.config.width / 2, this.sys.game.config.height / 2, 7, 0xffffff);
+    
+    // Capture keyboard input
+    this.cursors = this.input.keyboard.createCursorKeys();
 }
 
-
 function update() {
-    // Game update loop
+    // Check for user input and send paddle movements to the server
+    if (this.cursors.up.isDown) {
+        sendMessage({ type: 'move', direction: 'up' });
+    } else if (this.cursors.down.isDown) {
+        sendMessage({ type: 'move', direction: 'down' });
+    }
+
+    // Update paddle and ball positions from the game state
+    if (gameState) {
+        this.paddle1.y = gameState.paddles[0].y;
+        this.paddle2.y = gameState.paddles[1].y;
+        this.ball.x = gameState.ball.x;
+        this.ball.y = gameState.ball.y;
+    }
 }
 
 // Function to send message to server
 function sendMessage(message) {
     if (websocket.readyState === WebSocket.OPEN) {
-        websocket.send(message);
+        websocket.send(JSON.stringify(message)); // Ensure you send a stringified JSON
         console.log('Message sent to server:', message);
     } else {
         console.error('WebSocket is not open.');
