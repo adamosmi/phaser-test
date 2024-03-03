@@ -27,6 +27,7 @@ ball_initial_sign = random.choice([-1, 1])
 ball_velocity = {"x": 20, "y": 20}
 
 
+# define game loop
 async def game_loop():
     while True:
         # Here you would implement the logic to update the ball position
@@ -41,6 +42,7 @@ async def game_loop():
         await asyncio.sleep(1 / 60)  # Update at 60Hz
 
 
+# define paddle logic
 async def paddle_handler(websocket):
     global players, game_state
     # calc new player id
@@ -110,8 +112,14 @@ async def paddle_handler(websocket):
         pass
 
 
-async def paddle_main():
-    async with websockets.serve(paddle_handler, "", 8765):
+# call sub-handlers from master handler
+async def handler(websocket):
+    paddle_handler(websocket)
+
+
+# run paddle logic
+async def main():
+    async with websockets.serve(handler, "", 8765):
         await asyncio.Future()  # run forever
 
 
