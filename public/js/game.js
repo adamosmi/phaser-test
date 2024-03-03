@@ -32,7 +32,10 @@ function create() {
 
     websocket.onmessage = function(event) {
         // Parse the received message to update the game state
-        gameState = JSON.parse(event.data);
+        message = JSON.parse(event.data);
+        if (message.type == 'start') {
+            console.log(message)
+        }
     };
 
     websocket.onclose = function(event) {
