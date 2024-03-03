@@ -119,7 +119,7 @@ async def paddle_handler(websocket):
 
 # define ball logic
 async def ball_handler(websocket):
-    global game_state
+    global game_state, ball_sign_x, ball_sign_y
     ball_pos = game_state["ball"]
     ball_pos_x = ball_pos["x"]
     ball_pos_y = ball_pos["y"]
