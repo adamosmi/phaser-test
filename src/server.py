@@ -50,7 +50,9 @@ async def handler(websocket):
                 if data["type"] == "move":
                     # Placeholder logic; you will need to check for valid movement here
                     player_paddle_y = game_state["paddles"][player_id]["y"]
-                    if (player_paddle_y >= 0) and (player_paddle_y <= 600):
+                    if (player_paddle_y >= 0 + 50 + 10) and (
+                        player_paddle_y <= 600 - 50 - 10
+                    ):
                         if data["direction"] == "up":
                             game_state["paddles"][player_id]["y"] = player_paddle_y - 10
                         elif data["direction"] == "down":
