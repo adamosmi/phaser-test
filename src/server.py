@@ -21,7 +21,7 @@ ball_radius = 7
 
 # paddle position
 init_paddle1_pos_x = 0 + 50
-init_paddle2_pos_x = screen_height - 50
+init_paddle2_pos_x = screen_width - 50
 
 # paddle movement
 paddle_velocity = {"y": 10}
@@ -79,7 +79,7 @@ def calculate_ball_position():
         ball_sign_x *= -1  # switch the balls direction
 
     # test if position is past the top or bottom of the screen
-    if ball_box["y"]["min"] < 0 or ball_box["y"]["max"] > screen_width:
+    if (ball_box["y"]["min"] < 0) or (ball_box["y"]["max"] > screen_height):
         ball_sign_y *= -1  # switch the balls direction
 
     # update ball position
