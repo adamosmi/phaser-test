@@ -79,7 +79,7 @@ def calculate_ball_position():
         ball_sign_x *= -1  # switch the balls direction
 
     # test if position is past the top or bottom of the screen
-    if ball_box["y"]["min"] < 0 or ball_box["y"]["max"] > screen_height:
+    if ball_box["y"]["min"] < 0 or ball_box["y"]["max"] > screen_width:
         ball_sign_y *= -1  # switch the balls direction
 
     # update ball position
