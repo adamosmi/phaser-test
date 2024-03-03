@@ -8,6 +8,7 @@ players = {}
 game_state = {
     "paddles": [{"y": 300}, {"y": 300}],
     "ball": {"x": 400, "y": 300},
+    "scores": [0, 0],
 }
 
 # screen dimensions

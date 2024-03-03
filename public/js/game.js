@@ -13,7 +13,8 @@ var game = new Phaser.Game(config);
 var websocket;
 var gameState = {
     paddles: [{ y: 300 }, { y: 300 }],
-    ball: { x: 400, y: 300 }
+    ball: { x: 400, y: 300 },
+    scores: [0, 0]
 };
 
 function preload() {
@@ -58,6 +59,13 @@ function create() {
     
     // Capture keyboard input
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    // Create score text for player 1
+    scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
+    // Create score text for player 2, positioned on the other side of the screen
+    scoreText2 = this.add.text(664, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
+
+
 }
 
 function update() {
@@ -76,6 +84,8 @@ function update() {
         this.paddle2.y = gameState.paddles[1].y;
         this.ball.x = gameState.ball.x;
         this.ball.y = gameState.ball.y;
+        scoreText1.setText('Score: ' + gameState.scores[0]);
+        scoreText2.setText('Score: ' + gameState.scores[1]);
     }
 }
 
