@@ -28,7 +28,7 @@ async def handler(websocket):
     num_players = len(players)
     # normal game of 2 players
     if num_players in [0, 1]:
-        player_id = num_players + 1
+        player_id = num_players
 
         # store connection
         players[player_id] = websocket
