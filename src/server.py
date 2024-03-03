@@ -17,6 +17,7 @@ async def game_loop():
 
         # After updating the state, broadcast it to each player
         state = json.dumps(game_state)
+        print(f"Sending state: {state}")
         for player in players.values():
             await player.send(state)
         await asyncio.sleep(1 / 60)  # Update at 60Hz
