@@ -32,11 +32,71 @@ ball_sign_y = random.choice([-1, 1])
 ball_velocity = {"x": 1, "y": 1}
 
 
+def calculate_ball_position():
+    global game_state, ball_sign_x, ball_sign_y
+    ball_pos = game_state["ball"]
+    ball_pos_x = ball_pos["x"]
+    ball_pos_y = ball_pos["y"]
+
+    # detect collision
+    # collect paddle position
+    paddle1_pos = game_state["paddles"][0]
+    paddle2_pos = game_state["paddles"][1]
+    paddle1_pos_y = paddle1_pos["y"]
+    paddle2_pos_y = paddle2_pos["y"]
+
+    # calculate paddle borders
+    paddle1_box = {
+        "x": {
+            "min": init_paddle1_pos_x + paddle_width / 2,
+            "max": init_paddle1_pos_x + paddle_width / 2,
+        },
+        "y": {
+            "min": paddle1_pos_y + paddle_length / 2,
+            "max": paddle1_pos_y + paddle_length / 2,
+        },
+    }
+    paddle2_box = {
+        "x": {
+            "min": init_paddle2_pos_x + paddle_width / 2,
+            "max": init_paddle2_pos_x + paddle_width / 2,
+        },
+        "y": {
+            "min": paddle2_pos_y + paddle_length / 2,
+            "max": paddle2_pos_y + paddle_length / 2,
+        },
+    }
+
+    # calculate ball borders
+    ball_box = {
+        "x": {"min": ball_pos_x - ball_radius, "max": ball_pos_x + ball_radius},
+        "y": {"min": ball_pos_y - ball_radius, "max": ball_pos_y + ball_radius},
+    }
+
+    # determine ball direction
+    # test if position is past either box on the x axis (left of paddle1's rightmost edge, right of paddle2's leftmost edge)
+    if (ball_pos_x < paddle1_box["x"]["max"]) or (ball_pos_x > paddle2_box["x"]["min"]):
+        ball_sign_x *= -1  # switch the balls direction
+
+    # test if position is past the top or bottom of the screen
+    if ball_box["y"]["min"] < 0 or ball_box["y"]["max"] > screen_height:
+        ball_sign_y *= -1  # switch the balls direction
+
+    # update ball position
+    return {
+        # "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
+        "x": ball_pos_x + 1,
+        # "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
+        "y": ball_pos_y + 1,
+    }
+
+
 # define game loop
 async def game_loop():
     while True:
         # Here you would implement the logic to update the ball position
         # and check for collisions, scoring, etc.
+        game_state["ball"] = calculate_ball_position()
 
         # After updating the state, broadcast it to each player
         game_state_out = {"type": "state", "data": game_state}
@@ -47,8 +107,8 @@ async def game_loop():
         await asyncio.sleep(1 / 60)  # Update at 60Hz
 
 
-# define paddle logic
-async def paddle_handler(websocket):
+# define message handling logic
+async def handler(websocket):
     global players, game_state
     # calc new player id
     num_players = len(players)
@@ -115,76 +175,6 @@ async def paddle_handler(websocket):
     else:
         # add logic to handle more than 2 players
         pass
-
-
-# define ball logic
-async def ball_handler(websocket):
-    while True:
-        global game_state, ball_sign_x, ball_sign_y
-        ball_pos = game_state["ball"]
-        ball_pos_x = ball_pos["x"]
-        ball_pos_y = ball_pos["y"]
-
-        # detect collision
-        # collect paddle position
-        paddle1_pos = game_state["paddles"][0]
-        paddle2_pos = game_state["paddles"][1]
-        paddle1_pos_y = paddle1_pos["y"]
-        paddle2_pos_y = paddle2_pos["y"]
-
-        # calculate paddle borders
-        paddle1_box = {
-            "x": {
-                "min": init_paddle1_pos_x + paddle_width / 2,
-                "max": init_paddle1_pos_x + paddle_width / 2,
-            },
-            "y": {
-                "min": paddle1_pos_y + paddle_length / 2,
-                "max": paddle1_pos_y + paddle_length / 2,
-            },
-        }
-        paddle2_box = {
-            "x": {
-                "min": init_paddle2_pos_x + paddle_width / 2,
-                "max": init_paddle2_pos_x + paddle_width / 2,
-            },
-            "y": {
-                "min": paddle2_pos_y + paddle_length / 2,
-                "max": paddle2_pos_y + paddle_length / 2,
-            },
-        }
-
-        # calculate ball borders
-        ball_box = {
-            "x": {"min": ball_pos_x - ball_radius, "max": ball_pos_x + ball_radius},
-            "y": {"min": ball_pos_y - ball_radius, "max": ball_pos_y + ball_radius},
-        }
-
-        # determine ball direction
-        # test if position is past either box on the x axis (left of paddle1's rightmost edge, right of paddle2's leftmost edge)
-        if (ball_pos_x < paddle1_box["x"]["max"]) or (
-            ball_pos_x > paddle2_box["x"]["min"]
-        ):
-            ball_sign_x *= -1  # switch the balls direction
-
-        # test if position is past the top or bottom of the screen
-        if ball_box["y"]["min"] < 0 or ball_box["y"]["max"] > screen_height:
-            ball_sign_y *= -1  # switch the balls direction
-
-        # update ball position
-        game_state["ball"] = {
-            "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
-            # "x": ball_pos_x + 1,
-            "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
-            # "y": ball_pos_y + 1,
-        }
-        await asyncio.sleep(1 / 60)  # Update at 60Hz
-
-
-# call sub-handlers from master handler
-async def handler(websocket):
-    tasks = [paddle_handler(websocket), ball_handler(websocket)]
-    await asyncio.gather(*tasks)
 
 
 # run paddle logic
