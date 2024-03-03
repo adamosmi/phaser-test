@@ -173,6 +173,7 @@ async def ball_handler(websocket):
         "x": ball_pos_x + ball_velocity["x"] * ball_sign_x,
         "y": ball_pos_y + ball_velocity["y"] * ball_pos_y,
     }
+    await asyncio.sleep(1 / 60)  # Update at 60Hz
 
 
 # call sub-handlers from master handler
