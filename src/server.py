@@ -24,12 +24,13 @@ init_paddle1_pos_x = 0 + 50
 init_paddle2_pos_x = screen_width - 50
 
 # paddle movement
-paddle_velocity = {"y": 10}
+VELOCITY = 10
+paddle_velocity = {"y": VELOCITY}
 
 # ball movement
 ball_sign_x = random.choice([-1, 1])
 ball_sign_y = random.choice([-1, 1])
-ball_velocity = {"x": 10, "y": 10}
+ball_velocity = {"x": VELOCITY / 2, "y": VELOCITY / 2}
 
 
 def calculate_ball_position():
