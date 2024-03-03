@@ -20,16 +20,29 @@ async def game_loop():
 
 
 async def handler(websocket):
+    player_id = {v: k for k, v in players.items()}.get(websocket, 999)
+
     try:
         async for message in websocket:
             # Process incoming messages, e.g., paddle movements
             data = json.loads(message)
-            # Update the game state based on the input
             print(f"Received data: {data}")
-            # This is where you'd update the player's paddle position
+
+            # Handle different types of events
+            # Update paddle position based on input
+            if data["type"] == "move":
+                # Placeholder logic; you will need to check for valid movement here
+                if data["direction"] == "up":
+                    game_state["players"][player_id]["paddle"]["y"] -= 10
+                elif data["direction"] == "down":
+                    game_state["players"][player_id]["paddle"]["y"] += 10
+            # Handle player ready state
+            elif data["type"] == "ready":
+                pass
+
     except websockets.exceptions.ConnectionClosed:
-        player_id = {v: k for k, v in players.items()}.get(websocket, 999)
         print(f"Player {player_id} connection closed")
+
     finally:
         del players[player_id]
         del game_state["players"][player_id]
