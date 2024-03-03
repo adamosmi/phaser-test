@@ -114,7 +114,8 @@ async def paddle_handler(websocket):
 
 # call sub-handlers from master handler
 async def handler(websocket):
-    paddle_handler(websocket)
+    tasks = [paddle_handler(websocket)]
+    await asyncio.gather(*tasks)
 
 
 # run paddle logic
