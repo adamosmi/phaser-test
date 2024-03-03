@@ -59,11 +59,31 @@ function create() {
     
     // Capture keyboard input
     this.cursors = this.input.keyboard.createCursorKeys();
+    
+    // // Create score text for player 1
+    // scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
+    // // Create score text for player 2, positioned on the other side of the screen
+    // scoreText2 = this.add.text(664, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
+    
+    // Create score text for player 1 with larger font size and a stroke
+    scoreText1 = this.add.text(10, 16, '0', { 
+        fontSize: '48px', 
+        fill: '#FFF',
+        fontStyle: 'bold',
+        stroke: '#000',
+        strokeThickness: 6
+    });
 
-    // Create score text for player 1
-    scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
-    // Create score text for player 2, positioned on the other side of the screen
-    scoreText2 = this.add.text(664, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
+    // Adjust the alignment to the right for player 2's score
+    scoreText2 = this.add.text(this.sys.game.config.width - 10, 16, '0', { 
+        fontSize: '48px', 
+        fill: '#FFF',
+        fontStyle: 'bold',
+        stroke: '#000',
+        strokeThickness: 6
+    }).setOrigin(1, 0); // right aligned
+
+
 
 
 }
@@ -84,8 +104,8 @@ function update() {
         this.paddle2.y = gameState.paddles[1].y;
         this.ball.x = gameState.ball.x;
         this.ball.y = gameState.ball.y;
-        scoreText1.setText('Score: ' + gameState.scores[0]);
-        scoreText2.setText('Score: ' + gameState.scores[1]);
+        scoreText1.setText(gameState.scores[0]);
+        scoreText2.setText(gameState.scores[1]);
     }
 }
 
